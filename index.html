@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Space Login - BrightShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .login-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(30, 30, 60, 0.85);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px #6f00ff;
+      width: 360px;
+      text-align: center;
+      color: white;
+    }
+
+    .login-box h2 {
+      margin-bottom: 25px;
+      font-size: 26px;
+      color: #a29bfe;
+    }
+
+    .login-box input {
+      width: 90%;
+      padding: 12px;
+      margin: 12px 0;
+      border: none;
+      border-radius: 10px;
+      background: #222;
+      color: white;
+      font-size: 16px;
+      transition: box-shadow 0.3s;
+    }
+
+    .login-box input:focus {
+      outline: none;
+      box-shadow: 0 0 10px #6f00ff;
+    }
+
+    .login-box input:invalid {
+      box-shadow: 0 0 10px red;
+    }
+
+    .login-box button {
+      margin-top: 15px;
+      padding: 12px 25px;
+      background: linear-gradient(to right, #6f00ff, #a29bfe);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-box button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #6f00ff;
+    }
+
+    .login-box .signup {
+      margin-top: 25px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .login-box .signup a {
+      color: #00ffff;
+      text-decoration: none;
+      margin-left: 5px;
+    }
+
+    .loader {
+      display: none;
+      margin: 20px auto;
+      border: 6px solid #333;
+      border-top: 6px solid #a29bfe;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #successOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle, #00ff88 0%, #000 100%);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .success-message {
+      font-size: 48px;
+      color: white;
+      font-weight: bold;
+      text-shadow: 0 0 20px #00ff88;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="spaceCanvas"></canvas>
+
+<div class="login-box">
+  <h2>🚀 Space Login</h2>
+  <form id="loginForm">
+    <input type="text" id="username" placeholder="Username" required minlength="6" />
+    <input type="password" id="password" placeholder="Password" required minlength="6" />
+    <button type="submit">Log In</button>
+  </form>
+
+  <div class="loader" id="loader"></div>
+
+  <div class="signup">
+    New here?
+    <a href="#">Create an account</a>
+  </div>
+</div>
+
+<div id="successOverlay">
+  <div class="success-message">✅ Login Successful</div>
+</div>
+
+<script>
+  const form = document.getElementById("loginForm");
+  const loader = document.getElementById("loader");
+  const successOverlay = document.getElementById("successOverlay");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    // تحقق من الطول
+    if (username.length < 6 || password.length < 6) return;
+
+    // عرض اللودر
+    loader.style.display = "block";
+
+    // محاكاة تسجيل الدخول
+    setTimeout(() => {
+      loader.style.display = "none";
+
+      // حفظ اسم المستخدم
+      localStorage.setItem("username", username);
+
+      // عرض شاشة النجاح
+      successOverlay.style.display = "flex";
+
+      // الانتقال إلى الصفحة الرئيسية بعد 2 ثانية
+      setTimeout(() => {
+        window.location.href = "home page/index.html";
+      }, 2000);
+    }, 1500);
+  });
+
+  // خلفية النجوم المتحركة
+  const canvas = document.getElementById("spaceCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  let stars = [];
+  function Star() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.radius = Math.random() * 1.5;
+    this.speed = Math.random() * 0.5 + 0.2;
+  }
+
+  function createStars() {
+    for (let i = 0; i < 200; i++) {
+      stars.push(new Star());
+    }
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#ffffff";
+    stars.forEach((star) => {
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fill();
+      star.y += star.speed;
+      if (star.y > canvas.height) {
+        star.y = 0;
+        star.x = Math.random() * canvas.width;
+      }
+    });
+    requestAnimationFrame(drawStars);
+  }
+
+  createStars();
+  drawStars();
+</script>
+</body>
+</html>

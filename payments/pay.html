@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>دفعاتي</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* سيتم إرسال CSS في الدفعة 2 */
+
+    * {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #0b1d4d;
+  color: white;
+  padding-top: 100px;
+  padding-bottom: 120px;
+}
+
+/* الهيدر والفوتر */
+header, footer {
+  background: linear-gradient(to right, purple, #00008b);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: fixed;
+  z-index: 1000;
+}
+
+header {
+  top: 0;
+  justify-content: center;
+}
+
+footer {
+  bottom: 0;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 -3px 10px rgba(0,0,0,0.3);
+}
+
+/* محتوى الهيدر */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1000px;
+  padding-inline: 20px;
+}
+
+.logo img {
+  width: 90px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: white;
+  border-radius: 20px;
+  padding: 5px 10px;
+}
+
+.search-bar i {
+  color: #5c0fa8;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  padding: 8px;
+  font-size: 14px;
+}
+
+/* شريط المشتريات */
+.purchase-progress-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: white;
+}
+
+.progress-bar {
+  background-color: #333;
+  border-radius: 10px;
+  width: 150px;
+  height: 15px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background-color: #5c0fa8;
+  width: 0%;
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+
+/* زر القائمة */
+.menu-toggle {
+  font-size: 24px;
+  color: yellow;
+  cursor: pointer;
+}
+
+/* القائمة الجانبية */
+#sideMenu {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 280px;
+  height: 100%;
+  background-color: #1a2f5e;
+  color: white;
+  padding: 20px;
+  z-index: 3000;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+#sideMenu.active {
+  right: 0;
+}
+
+.menu-close {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 24px;
+  color: yellow;
+  cursor: pointer;
+}
+
+.menu-header {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.vip-badge {
+  background-color: gold;
+  color: black;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  margin-top: 5px;
+  display: inline-block;
+}
+
+.balance-box {
+  background-color: #fff;
+  color: #000;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.menu-links {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-links li {
+  margin-bottom: 15px;
+}
+
+.menu-links a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  direction: rtl;
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.menu-links a:hover,
+.menu-links .active-link {
+  background-color: #5c0fa8;
+}
+
+.menu-links .icon i {
+  font-size: 18px;
+  color: yellow;
+}
+
+/* الفوتر */
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.footer-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.footer-nav a .icon {
+  padding: 10px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.footer-nav a:hover .icon,
+.footer-nav .active .icon {
+  background-color: purple;
+}
+
+.footer-nav a i {
+  color: yellow;
+  font-size: 20px;
+}
+
+/* المحتوى الرئيسي */
+main {
+  margin-top: 120px;
+  text-align: center;
+  padding: 20px;
+}
+
+.headline {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.balance-display {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* قائمة الدفعات */
+.payments-list {
+  max-width: 800px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.payment-card {
+  background-color: #1a2f5e;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: left;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.payment-card h4 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: yellow;
+}
+
+.payment-card p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.status-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: gold;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.clear-btn {
+  background-color: #c0392b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.clear-btn:hover {
+  background-color: #e74c3c;
+}
+
+#pageLoader {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loader-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.loader-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.loader-ring {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border: 6px solid transparent;
+  border-top: 6px solid #a29bfe;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 1;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  #sideMenu {
+    width: 280px; /* عرض ثابت */
+    right: -280px; /* مخفية خارج الشاشة */
+    transition: right 0.3s ease;
+  }
+
+  #sideMenu.active {
+    right: 0; /* تظهر من اليمين */
+  }
+
+  body.menu-open {
+    overflow: hidden; /* يمنع تمرير الصفحة أثناء فتح القائمة */
+  }
+}
+.footer-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.footer-nav a {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+  </style>
+</head>
+<body>
+<div id="pageLoader" style="display: none;">
+  <div class="loader-wrapper">
+    <div class="loader-ring"></div>
+    <img src="../store_logo-removebg-preview (1).png" alt="Logo" class="loader-logo" />
+  </div>
+</div>
+<header>
+  <div class="header-content">
+    <div class="logo">
+      <img src="store_logo-removebg-preview (1).png" alt="Logo" />
+    </div>
+
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="بحث..." />
+    </div>
+
+    <div class="purchase-progress-container">
+      <span>مشترياتك:</span>
+      <div class="progress-bar">
+        <div class="progress-fill" id="purchaseProgress"></div>
+      </div>
+      <span id="purchaseAmount">0$</span>
+    </div>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <i id="menuIcon" class="fas fa-bars"></i>
+    </div>
+  </div>
+</header>
+
+<div id="sideMenu">
+  <div class="menu-close" onclick="toggleMenu()">
+    <i class="fas fa-times"></i>
+  </div>
+
+  <div class="menu-header">
+    <h3 id="usernameDisplay">مرحبا</h3>
+    <p>ID:2121230</p>
+    <span class="vip-badge">VIP RETAILER</span>
+  </div>
+
+  <div class="balance-box">
+    <span>الرصيد: <strong id="balanceAmount">S.P 0.000</strong></span>
+  </div>
+
+  <ul class="menu-links">
+    <li><a href="../home page/index.html"><span class="link-text">الرئيسية</span><span class="icon"><i class="fas fa-home"></i></span></a></li>
+    <li><a href="../add balance section/addbala.html"><span class="link-text">إضافة رصيد</span><span class="icon"><i class="fas fa-plus-circle"></i></span></a></li>
+    <li><a href="#" class="active-link"><span class="link-text">دفعاتي</span><span class="icon"><i class="fas fa-credit-card"></i></span></a></li>
+    <li><a href="../wallet/wallet.html"><span class="link-text">محفظتي</span><span class="icon"><i class="fas fa-wallet"></i></span></a></li>
+    <li><a href="../orders/index.html"><span class="link-text">طلباتي</span><span class="icon"><i class="fas fa-list"></i></span></a></li>
+    <li><a href="../wakeels/wakeel.html"><span class="link-text">وكلاؤنا</span><span class="icon"><i class="fas fa-users"></i></span></a></li>
+    <li><a href="#"><span class="link-text">الحماية</span><span class="icon"><i class="fas fa-shield-alt"></i></span></a></li>
+    <li><a href="#"><span class="link-text">من نحن</span><span class="icon"><i class="fas fa-info-circle"></i></span></a></li>
+  </ul>
+</div>
+
+<main>
+  <div class="headline">دفعاتك الأخيرة</div>
+  <div class="balance-display" id="mainBalance">رصيدك الحالي: S.P 0.000</div>
+<button onclick="clearTopUps()" class="clear-btn">مسح دفعات</button>
+  <div class="payments-list" id="paymentsList">
+    <!-- سيتم عرض الطلبات هنا -->
+  </div>
+</main>
+
+<footer>
+  <div class="footer-nav">
+    <a href="../home page/index.html"><span class="icon"><i class="fas fa-home"></i></span> Home</a>
+    <a href="../wallet/wallet.html"><span class="icon"><i class="fas fa-wallet"></i></span>wallet</a>
+    <a href="#" class="active"><span class="icon"><i class="fas fa-shopping-cart"></i></span>payments</a>
+    <a href="../orders/index.html"><span class="icon"><i class="fas fa-list"></i></span>orders</a>
+    <a href="../add balance section/addbala.html"><span class="icon"><i class="fas fa-plus-circle"></i></span>+ Balance</a>
+  </div>
+</footer>
+<script>
+
+
+let userBalance = parseFloat(localStorage.getItem("userBalance")) || 801.866;
+const balanceDisplay = document.getElementById("balanceAmount");
+const mainBalance = document.getElementById("mainBalance");
+
+function updateBalances() {
+  balanceDisplay.textContent = "S.P " + userBalance.toFixed(3);
+  mainBalance.textContent = "رصيدك الحالي: S.P " + userBalance.toFixed(3);
+  localStorage.setItem("userBalance", userBalance);
+}
+
+updateBalances();
+
+// تحديث شريط المشتريات
+function updatePurchaseProgress() {
+  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  let totalSpent = 0;
+  orders.forEach(order => {
+    totalSpent += parseFloat(order.price.replace("$",""));
+  });
+
+  const progressBar = document.getElementById("purchaseProgress");
+  const purchaseAmount = document.getElementById("purchaseAmount");
+  
+  purchaseAmount.textContent = totalSpent.toFixed(2) + "$";
+
+  let percent = (totalSpent / 1000) * 100;
+  if(percent > 100) percent = 100;
+  progressBar.style.width = percent + "%";
+}
+
+updatePurchaseProgress();
+
+// عرض اسم المستخدم
+const savedName = localStorage.getItem('username');
+const usernameDisplay = document.getElementById('usernameDisplay');
+if(savedName && usernameDisplay) {
+  usernameDisplay.textContent = 'مرحبا، ' + savedName;
+}
+
+// فتح/إغلاق القائمة الجانبية
+const sideMenu = document.getElementById("sideMenu");
+const menuIcon = document.getElementById("menuIcon");
+
+function toggleMenu() {
+  sideMenu.classList.toggle("active");
+
+  if (sideMenu.classList.contains("active")) {
+    menuIcon.classList.remove("fa-bars");
+    menuIcon.classList.add("fa-times");
+  } else {
+    menuIcon.classList.remove("fa-times");
+    menuIcon.classList.add("fa-bars");
+  }
+}
+
+// عرض الطلبات
+const paymentsList = document.getElementById("paymentsList");
+const topUps = JSON.parse(localStorage.getItem("topUps")) || [];
+
+if (topUps.length === 0) {
+  paymentsList.innerHTML = "<p>لا يوجد دفعات حتى الآن.</p>";
+} else {
+  topUps.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "payment-card";
+
+    card.innerHTML = `
+      <div class="status-badge">Pending</div>
+      <h4>Payment #${index + 1}</h4>
+      <p><strong>Method:</strong> ${item.method}</p>
+      <p><strong>Amount:</strong> ${item.amount}</p>
+      <p><strong>Transaction ID:</strong> ${item.transaction}</p>
+      <p><strong>Time:</strong> ${item.time}</p>
+    `;
+
+    paymentsList.appendChild(card);
+  });
+}
+
+
+function clearTopUps() {
+  if (confirm("هل أنت متأكد أنك تريد مسح جميع الدفعات؟")) {
+    localStorage.removeItem("topUps");
+    document.getElementById("paymentsList").innerHTML = "<p>تم مسح جميع الدفعات.</p>";
+  }
+}
+
+
+ const loader = document.getElementById("pageLoader");
+
+document.querySelectorAll("a[href]").forEach(link => {
+  link.addEventListener("click", function(e) {
+    const href = this.getAttribute("href");
+    if (!href || href.startsWith("#")) return;
+
+    e.preventDefault();
+    loader.style.display = "flex";
+
+    setTimeout(() => {
+      window.location.href = href;
+    }, 500); // نصف ثانية
+  });
+});
+  // سيتم إرسال JavaScript في الدفعة 3
+</script>
+
+</body>
+</html>
